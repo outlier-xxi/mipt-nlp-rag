@@ -1,7 +1,7 @@
 from loguru import logger
 from pymilvus import MilvusClient, DataType
 
-from .settings import settings
+from src.common.settings import settings
 
 
 def get_client() -> MilvusClient:

@@ -5,19 +5,19 @@ from src.common.settings import settings
 
 
 def get_client() -> MilvusClient:
-    logger.info("connecting to milvus at {}", settings.milvus_uri)
+    logger.info(f"connecting to milvus at {settings.milvus_uri}")
     return MilvusClient(settings.milvus_uri)
 
 
 def ensure_collection(client: MilvusClient) -> None:
     if client.has_collection(settings.milvus_collection):
-        logger.info("collection '{}' already exists, skipping creation", settings.milvus_collection)
+        logger.info(f"collection '{settings.milvus_collection}' already exists, skipping creation")
         return
 
-    logger.info("creating collection '{}'", settings.milvus_collection)
+    logger.info(f"creating collection '{settings.milvus_collection}'")
 
-    schema = client.create_schema(auto_id=True, enable_dynamic_field=False)
-    schema.add_field("id", DataType.INT64, is_primary=True)
+    schema = client.create_schema(auto_id=False, enable_dynamic_field=False)
+    schema.add_field("id", DataType.VARCHAR, is_primary=True, max_length=64)
     schema.add_field("term", DataType.VARCHAR, max_length=512)
     schema.add_field("definition", DataType.VARCHAR, max_length=4096)
     schema.add_field("source", DataType.VARCHAR, max_length=128)
@@ -36,8 +36,8 @@ def ensure_collection(client: MilvusClient) -> None:
         schema=schema,
         index_params=index_params,
     )
-    logger.info("collection '{}' created with hnsw cosine index", settings.milvus_collection)
+    logger.info(f"collection '{settings.milvus_collection}' created with hnsw cosine index")
 
 
-def insert_records(client: MilvusClient, records: list[dict]) -> None:
-    client.insert(collection_name=settings.milvus_collection, data=records)
+def upsert_records(client: MilvusClient, records: list[dict]) -> None:
+    client.upsert(collection_name=settings.milvus_collection, data=records)

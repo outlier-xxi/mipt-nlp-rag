@@ -18,9 +18,9 @@ def ensure_collection(client: MilvusClient) -> None:
 
     schema = client.create_schema(auto_id=False, enable_dynamic_field=False)
     schema.add_field("id", DataType.VARCHAR, is_primary=True, max_length=64)
-    schema.add_field("term", DataType.VARCHAR, max_length=512)
-    schema.add_field("definition", DataType.VARCHAR, max_length=4096)
-    schema.add_field("source", DataType.VARCHAR, max_length=128)
+    schema.add_field("term", DataType.VARCHAR, max_length=512)         # finrad terms maxlen 156
+    schema.add_field("definition", DataType.VARCHAR, max_length=4400)  # finrad definitions maxlen 4200
+    schema.add_field("source", DataType.VARCHAR, max_length=128)       # finrad sources maxlen 18
     schema.add_field("embedding", DataType.FLOAT_VECTOR, dim=settings.embedding_dim)
 
     index_params = client.prepare_index_params()

@@ -41,3 +41,47 @@ def ensure_collection(client: MilvusClient) -> None:
 
 def upsert_records(client: MilvusClient, records: list[dict]) -> None:
     client.upsert(collection_name=settings.milvus_collection, data=records)
+
+
+def clear_collection(client: MilvusClient) -> None:
+    logger.info(f"dropping collection '{settings.milvus_collection}'")
+    if client.has_collection(settings.milvus_collection):
+        client.drop_collection(settings.milvus_collection)
+        logger.info("collection dropped")
+    else:
+        logger.info("collection does not exist, nothing to drop")
+
+
+def search_records(
+    client: MilvusClient,
+    query_embedding: list[float],
+    top_k: int = 5,
+) -> list[dict]:
+    logger.info(f"searching top {top_k} records")
+
+    results = client.search(
+        collection_name=settings.milvus_collection,
+        data=[query_embedding],
+        limit=top_k,
+        output_fields=["term", "definition", "source"],
+    )
+
+    hits = [
+        {
+            "term": hit["entity"]["term"],
+            "definition": hit["entity"]["definition"],
+            "source": hit["entity"]["source"],
+            "score": hit["distance"],
+        }
+        for hit in results[0]
+    ]
+    
+    logger.info(f"search returned {len(hits)} hits")
+    return hits
+
+
+def get_collection_stats(client: MilvusClient) -> dict:
+    logger.info("fetching collection statistics")
+    stats = client.get_collection_stats(settings.milvus_collection)
+    logger.info(f"collection stats: {stats}")
+    return stats

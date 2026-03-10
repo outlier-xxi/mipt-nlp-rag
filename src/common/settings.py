@@ -10,7 +10,14 @@ class Settings(BaseSettings):
     embedding_base_url  : str = "http://localhost:30001/v1"
     embedding_dim       : int = 2560
     embedding_batch_size: int = 64
+    
     finrad_dataset_name : str = "sohomghosh/FinRAD_Financial_Readability_Assessment_Dataset"
+    
+    log_level           : str = "INFO"
+    
+    llm_model           : str = "openai/gpt-oss-20b"
+    llm_base_url        : str = "http://localhost:30000/v1"
+    llm_api_key         : str = "ignored"
 
 
 settings = Settings()

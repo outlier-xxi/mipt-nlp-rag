@@ -5,7 +5,12 @@ from openai import OpenAI
 
 from src.common.log import logger
 from src.common.settings import settings
-from src.common.vdb import clear_collection, get_client, get_collection_stats, search_records
+from src.common.vdb import (
+    clear_collection,
+    get_client,
+    get_collection_stats,
+    search_records,
+)
 
 
 @tool

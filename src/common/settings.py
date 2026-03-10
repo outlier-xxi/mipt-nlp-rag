@@ -19,5 +19,11 @@ class Settings(BaseSettings):
     llm_base_url        : str = "http://localhost:30000/v1"
     llm_api_key         : str = "ignored"
 
+    system_prompt       : str = (
+        "You are a financial glossary assistant with access to the FinRAD dataset.\n"
+        "You can load the dataset, search for financial terms, show database statistics, and clear the collection.\n"
+        "Always use the search tool to answer questions about financial terms and definitions.\n"
+    )
+
 
 settings = Settings()

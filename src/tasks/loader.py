@@ -12,7 +12,7 @@ from src.common.vdb import get_client, ensure_collection, upsert_records
 
 async def load_finrad() -> None:
     logger.info(f"loading dataset '{settings.finrad_dataset_name}'")
-    dataset = load_dataset(settings.finrad_dataset_name)["train"]
+    dataset = (await asyncio.to_thread(load_dataset, settings.finrad_dataset_name))["train"]
     total = len(dataset)
     logger.info(f"dataset loaded: {total} records")
 

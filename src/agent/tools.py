@@ -11,13 +11,13 @@ from src.common.vdb import (
     get_collection_stats,
     search_records,
 )
+from src.tasks.loader import load_finrad
 
 
 @tool
 def tool_load_dataset() -> str:
     """Load the FinRAD financial glossary dataset into Milvus vector database.
     Use this when the user asks to load, import, or populate the database."""
-    from src.tasks.loader import load_finrad
 
     logger.info("tool invoked: load_dataset")
     asyncio.run(load_finrad())

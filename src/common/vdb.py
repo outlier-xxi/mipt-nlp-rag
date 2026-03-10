@@ -82,6 +82,9 @@ def search_records(
 
 def get_collection_stats(client: MilvusClient) -> dict:
     logger.info("fetching collection statistics")
+    if not client.has_collection(settings.milvus_collection):
+        logger.info(f"collection '{settings.milvus_collection}' does not exist")
+        return {"error": f"collection '{settings.milvus_collection}' does not exist"}
     stats = client.get_collection_stats(settings.milvus_collection)
     logger.info(f"collection stats: {stats}")
     return stats
